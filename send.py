@@ -8,59 +8,52 @@ import sys
 
 def send_message(receiver_ip, port, message):
 	"""Send a UDP message"""
-	try:
-		with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-			sock.sendto(message.encode(), (receiver_ip, port))
-		print(f"Message sent successfully to {receiver_ip}:{port}")
-	except Exception as e:
-		print(f"Error sending message: {e}")
+	with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+		sock.sendto(message.encode(), (receiver_ip, port))
+	print(f"Message sent successfully to {receiver_ip}:{port}")
 
 def send_file(receiver_ip, port, filepath):
 	"""Send a file via TCP"""
-	try:
-		# Validate file exists
-		if not os.path.isfile(filepath):
-			raise FileNotFoundError(f"File not found: {filepath}")
+	# Validate file exists
+	if not os.path.isfile(filepath):
+		raise FileNotFoundError(f"File not found: {filepath}")
 
-		# Open file and socket
-		with open(filepath, 'rb') as file, socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-			
-			# Connect to receiver
-			sock.connect((receiver_ip, port))
-			
-			# Get filename and file size
-			filename = os.path.basename(filepath)
-			filesize = os.path.getsize(filepath)
-			
-			# Prepare filename (as UTF-8 bytes)
-			filename_bytes = filename.encode('utf-8')
-			
-			# Send filename length (4 bytes)
-			sock.send(struct.pack('!I', len(filename_bytes)))
-			
-			# Send filename
-			sock.send(filename_bytes)
-			
-			# Send file size (8 bytes)
-			sock.send(struct.pack('!Q', filesize))
-			
-			# Send file contents
-			total_sent = 0
-			while True:
-				chunk = file.read(4096)
-				if not chunk:
-					break
-				sock.sendall(chunk)
-				total_sent += len(chunk)
-				
-				# Optional: Progress tracking
-				progress = (total_sent / filesize) * 100
-				print(f"\rSending {filename}: {progress:.2f}%", end='', flush=True)
-			
-			print(f"\nFile sent successfully: {filename}")
+	# Open file and socket
+	with open(filepath, 'rb') as file, socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 		
-	except Exception as e:
-		print(f"Error sending file: {e}")
+		# Connect to receiver
+		sock.connect((receiver_ip, port))
+		
+		# Get filename and file size
+		filename = os.path.basename(filepath)
+		filesize = os.path.getsize(filepath)
+		
+		# Prepare filename (as UTF-8 bytes)
+		filename_bytes = filename.encode('utf-8')
+		
+		# Send filename length (4 bytes)
+		sock.send(struct.pack('!I', len(filename_bytes)))
+		
+		# Send filename
+		sock.send(filename_bytes)
+		
+		# Send file size (8 bytes)
+		sock.send(struct.pack('!Q', filesize))
+		
+		# Send file contents
+		total_sent = 0
+		while True:
+			chunk = file.read(4096)
+			if not chunk:
+				break
+			sock.sendall(chunk)
+			total_sent += len(chunk)
+			
+			# Optional: Progress tracking
+			progress = (total_sent / filesize) * 100
+			print(f"\rSending {filename}: {progress:.2f}%", end='', flush=True)
+		
+		print(f"\nFile sent successfully: {filename}")
 
 parser = argparse.ArgumentParser(description="Network File/Message Transfer Utility")
 	
