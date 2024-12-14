@@ -38,7 +38,7 @@ def receive_file(port, save_path='.'):
 			
 			# Read filename length (4 bytes)
 			filename_length_bytes = conn.recv(4)
-			filename_length = struct.unpack('!I', filename_length_bytes)[0]
+			filename_length = int.from_bytes(filename_length_bytes, "little", signed = False);
 			
 			# Read filename
 			filename_bytes = conn.recv(filename_length)
@@ -46,7 +46,7 @@ def receive_file(port, save_path='.'):
 			
 			# Read file size (8 bytes)
 			filesize_bytes = conn.recv(8)
-			filesize = struct.unpack('!Q', filesize_bytes)[0]
+			filename_length = int.from_bytes(filesize_bytes, "little", signed = False);
 			
 			# Full file path
 			filepath = os.path.join(save_path, filename)

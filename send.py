@@ -12,6 +12,7 @@ def send_message(receiver_ip, port, message):
 		sock.sendto(message.encode(), (receiver_ip, port))
 	print(f"Message sent successfully to {receiver_ip}:{port}")
 
+
 def send_file(receiver_ip, port, filepath):
 	"""Send a file via TCP"""
 	# Validate file exists
@@ -32,13 +33,13 @@ def send_file(receiver_ip, port, filepath):
 		filename_bytes = filename.encode('utf-8')
 		
 		# Send filename length (4 bytes)
-		sock.send(struct.pack('!I', len(filename_bytes)))
+		sock.send(len(filename_bytes).to_bytes(4, "little", signed = False));
 		
 		# Send filename
 		sock.send(filename_bytes)
 		
 		# Send file size (8 bytes)
-		sock.send(struct.pack('!Q', filesize))
+		sock.send(filesize.to_bytes(8, "little", signed = False));
 		
 		# Send file contents
 		total_sent = 0
