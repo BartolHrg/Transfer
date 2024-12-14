@@ -46,7 +46,7 @@ def receive_file(port, save_path='.'):
 			
 			# Read file size (8 bytes)
 			filesize_bytes = conn.recv(8)
-			filename_length = int.from_bytes(filesize_bytes, "little", signed = False);
+			filesize = int.from_bytes(filesize_bytes, "little", signed = False);
 			
 			# Full file path
 			filepath = os.path.join(save_path, filename)
