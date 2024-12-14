@@ -151,7 +151,7 @@ pass
 
 
 window = tk.Tk();
-window.geometry("600x150")
+window.geometry("800x200")
 
 frame = ttk.Frame(window);
 frame.pack(expand = True, fill = tk.BOTH, padx = 20, pady = 20);
