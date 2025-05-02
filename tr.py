@@ -219,4 +219,7 @@ dst_port_var .trace("w", updateConfig);
 send_file_var.trace("w", updateConfig);
 recv_path_var.trace("w", updateConfig);
 
-window.mainloop();
+
+if "idlelib.run" not in sys.modules:
+	window.mainloop();
+pass
