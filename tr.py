@@ -65,10 +65,10 @@ def sizeToStr(x: int):
 	(x, mb) = divmod(x, 1024);
 	(x, gb) = divmod(x, 1024);
 	r = "";
-	if gb: r += f"{gb} GB ";
-	if mb: r += f"{mb} MB ";
-	if kb: r += f"{kb} kB ";
-	if b: r += f"{b} B ";
+	if gb: r += f"{gb} GB|";
+	if mb: r += f"{mb} MB|";
+	if kb: r += f"{kb} kB|";
+	if b: r += f"{b} B";
 	if not r: r = "0";
 	return r.strip();
 pass
